@@ -128,8 +128,11 @@ function joinLive(id) {
   consumeCrossViralitySeeds(live);
   
   startFomoTimer(live);
-  
-  addChat('p6 Lung connected. Eye watching. Spores breathe here.');
+
+  live.pot = live.pot || 0;
+  reflectRoomStats(live);
+  addChat('p6 Lung connected. Eye watching. Spores breathe here.', null, 'sys');
+  startAudience(live);
   if (live.ritual) document.getElementById('ritual-panel').classList.remove('hidden');
   renderLives();
 }
@@ -360,6 +363,8 @@ function addReflection() {
 
 function leaveLive() {
   if (eyeInterval) clearInterval(eyeInterval);
+  stopAudience();
+  if (currentLive) localStorage.setItem('p9_lives', JSON.stringify(lives));
   currentLive = null;
   hideAll();
   document.getElementById('lives').classList.remove('hidden');
@@ -429,13 +434,106 @@ function startFomoTimer(live) {
   const iv = setInterval(() => { left--; if (tEl) tEl.textContent = left+'s'; if (left<=0 || !currentLive) clearInterval(iv); }, 1000);
 }
 
-function addChat(msg) {
+function addChat(msg, who, kind) {
   const chat = document.getElementById('live-chat');
   if (!chat) return;
   const p = document.createElement('div');
-  p.textContent = '• ' + msg;
+  p.className = 'chat-line' + (kind ? ' chat-' + kind : '');
+  if (who) {
+    const nm = document.createElement('span');
+    nm.className = 'chat-who';
+    nm.textContent = who;
+    p.appendChild(nm);
+    p.appendChild(document.createTextNode(' ' + msg));
+  } else {
+    p.textContent = '• ' + msg;
+  }
   chat.appendChild(p);
+  // Cap DOM so a long session doesn't grow unbounded
+  while (chat.childNodes.length > 60) chat.removeChild(chat.firstChild);
   chat.scrollTop = chat.scrollHeight;
+}
+
+// === LIVING ROOM: ambient audience reacts to real live surprise state ===
+// The room's aliveness is driven by live.surprise + p6 breath — not a fixed script.
+// Higher intensity -> more arrivals, faster chatter, more tips. Quiet when it dips.
+let audienceInterval = null;
+let ambientPool = [];
+
+const AUDIENCE_NAMES = ['0xVelvet','moth.eth','0xEmber','silk_wraith','0xNyx','duskmoth','0xOpal','veil_09','0xRune','ashfen','0xLilac','0xSeren','breath_kin','0xMiré','umbral','0xFawn'];
+const CHAT_HOT   = ['the eye just breathed 🔥','felt that pulse','ok this room is alive','breath sync insane rn','goosebumps','+1 to the mycelium','she felt it too','stay stay stay'];
+const CHAT_WARM  = ['soft here tonight','veil is nice','warming up','hi from the circle','the ache lands','mm','holding the breath'];
+const CHAT_QUIET = ['who else lurking','waiting for the pulse','...','quiet realm','breath low, patient'];
+const TIP_AMTS   = [3, 5, 8, 12, 21];
+
+function startAudience(live) {
+  stopAudience();
+  // Seed a plausible ambient pool sized from current viewers.
+  const seed = Math.max(4, Math.min(14, Math.round((live.viewers || 12) * 0.35)));
+  ambientPool = [];
+  for (let i = 0; i < seed; i++) ambientPool.push(pickName());
+  addChat(`${ambientPool.length} souls already breathing here`, null, 'sys');
+
+  let beat = 0;
+  audienceInterval = setInterval(() => {
+    if (!currentLive || currentLive.id !== live.id) { stopAudience(); return; }
+    beat++;
+    const s = Math.max(0, Math.min(1, live.surprise || 0));
+
+    // 1) Arrivals/exits scale with intensity (FOMO: hot rooms fill up).
+    if (Math.random() < 0.25 + s * 0.45) {
+      const nm = pickName();
+      ambientPool.push(nm);
+      live.viewers = (live.viewers || 12) + 1;
+      if (live.seatsLeft != null) live.seatsLeft = Math.max(0, live.seatsLeft - 1);
+      addChat('slipped into the room', nm, 'join');
+      reflectRoomStats(live);
+      renderLives();
+    } else if (ambientPool.length > 3 && Math.random() < 0.12 - s * 0.08) {
+      const gone = ambientPool.splice(Math.floor(Math.random() * ambientPool.length), 1)[0];
+      live.viewers = Math.max(1, (live.viewers || 12) - 1);
+      addChat('drifted out', gone, 'leave');
+      reflectRoomStats(live);
+      renderLives();
+    }
+
+    // 2) Ambient chat — frequency + mood driven by real surprise value.
+    const chatChance = 0.30 + s * 0.55;
+    if (ambientPool.length && Math.random() < chatChance) {
+      const speaker = ambientPool[Math.floor(Math.random() * ambientPool.length)];
+      const pool = s > 0.66 ? CHAT_HOT : s > 0.42 ? CHAT_WARM : CHAT_QUIET;
+      addChat(pool[Math.floor(Math.random() * pool.length)], speaker, 'aud');
+    }
+
+    // 3) Ambient tips — hot rooms make the crowd tip, which visibly grows the pot.
+    if (ambientPool.length && Math.random() < 0.06 + s * 0.30) {
+      const tipper = ambientPool[Math.floor(Math.random() * ambientPool.length)];
+      const amt = TIP_AMTS[Math.min(TIP_AMTS.length - 1, Math.floor(s * TIP_AMTS.length))];
+      live.pot = (live.pot || 0) + amt;
+      addChat(`tipped ${amt} $EROS ✦`, tipper, 'tip');
+      live.surprise = Math.min(1, (live.surprise || 0.5) + amt * 0.0025);
+      reflectRoomStats(live);
+    }
+  }, 1400);
+}
+
+function stopAudience() {
+  if (audienceInterval) { clearInterval(audienceInterval); audienceInterval = null; }
+  ambientPool = [];
+}
+
+function pickName() {
+  return AUDIENCE_NAMES[Math.floor(Math.random() * AUDIENCE_NAMES.length)];
+}
+
+// Keep the room header (viewers / seats / pot) truthful to live state in real time.
+function reflectRoomStats(live) {
+  const seatsEl = document.getElementById('seats-left');
+  if (seatsEl) seatsEl.textContent = live.seatsLeft != null ? live.seatsLeft : '∞';
+  const vEl = document.getElementById('room-viewers');
+  if (vEl) vEl.textContent = live.viewers || 1;
+  const potEl = document.getElementById('room-pot');
+  if (potEl) potEl.textContent = (live.pot || 0) + ' $EROS';
 }
 
 // births active. p6 voice live with surprise ratings + variable tips. p3 co-host spore invites. NFT near-miss passes. p7 FOMO radius + p5 ritual cross.
