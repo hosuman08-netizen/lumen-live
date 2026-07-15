@@ -167,8 +167,10 @@ function startP6Live() {
 
 function startLive() {
   const title = document.getElementById('live-title').value || 'New Realm';
-  const cost = parseInt(document.getElementById('entry-cost').value);
-  const max = parseInt(document.getElementById('max-viewers').value);
+  let cost = parseInt(document.getElementById('entry-cost').value);
+  let max = parseInt(document.getElementById('max-viewers').value);
+  if (!Number.isFinite(cost) || cost < 0) cost = 15;
+  if (!Number.isFinite(max) || max < 3) max = 50;
   const surprise = window._p9LiveSurprise || 0.65;
 
   if (!wallet) { alert('Connect wallet first'); return; }
@@ -188,18 +190,40 @@ function startLive() {
     active: true,
     surprise,
     maxViewers: max,
-    seatsLeft: Math.max(3, Math.floor(max * 0.7))
+    seatsLeft: Math.max(3, Math.floor(max * 0.7)),
+    pot: 0,
+    hosted: true
   };
-  
+
   lives.unshift(newLive);
   localStorage.setItem('p9_lives', JSON.stringify(lives));
-  
-  // Mint Access Pass NFT mock
-  alert(`Live started: ${finalTitle}\nAccess Pass NFT minted.\nBirths active: real-time p6 Eye + FOMO seats + p3 cohost + mutating codex.`);
-  
-  renderLives();
+
+  // Mint Access Pass NFT mock, then actually HOST the room (real creator flow).
+  alert(`Live started: ${finalTitle}\nAccess Pass NFT minted. You are now hosting.`);
+  hostLiveRoom(newLive);
+}
+
+// Creator actually enters and hosts their own room — the audience gathers live.
+function hostLiveRoom(live) {
+  const dna = pullP6DNA();
+  live.surprise = Math.min(1, (live.surprise || 0.65) * 0.6 + dna.surprise * 0.6 + dna.ache * 0.25);
+  currentLive = live;
   hideAll();
-  document.getElementById('lives').classList.remove('hidden');
+  const room = document.getElementById('live-room');
+  room.classList.remove('hidden');
+  document.getElementById('room-title').textContent = live.title + ' — HOSTING';
+  document.getElementById('room-meta').innerHTML =
+    `you • host • entry ${live.cost} $EROS • breath ${dna.breath.toFixed(2)} ache ${dna.ache.toFixed(2)}`;
+  reflectRoomStats(live);
+
+  startMycelialEye(live, dna);
+  consumeCrossViralitySeeds(live);
+  startFomoTimer(live);
+
+  addChat('Your realm is live. The breath is open.', null, 'sys');
+  startAudience(live);
+  if (live.ritual) document.getElementById('ritual-panel').classList.remove('hidden');
+  renderLives();
 }
 
 function renderCommunities() {
