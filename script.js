@@ -70,13 +70,20 @@ function renderLives() {
     const card = document.createElement('div');
     card.className = `live-card ${live.active ? 'live' : ''}`;
     const seats = live.seatsLeft != null ? `${live.seatsLeft} seats left` : `${live.viewers} watching`;
+    const s = Math.max(0, Math.min(1, live.surprise || 0));
+    const scarce = live.seatsLeft != null && live.seatsLeft <= 8;
     card.innerHTML = `
-      <div class="meta">LIVE • ${live.creator}</div>
+      <div class="card-top">
+        <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+        <span class="meta">${live.creator}</span>
+      </div>
       <h3>${live.title}</h3>
-      <div class="viewers">👁 ${live.viewers} watching • ${seats}</div>
-      <div class="price">${live.cost} $EROS entry • surprise ${live.surprise?.toFixed(2)}</div>
-      <button onclick="joinLive(${live.id})">Join Room (p6 Voice)</button>
-      <div class="eye-hint">p6</div>
+      <div class="viewers">${live.viewers} watching · <span class="${scarce ? 'seats-hot' : ''}">${seats}</span></div>
+      <div class="surprise-row">
+        <div class="surprise-bar"><div class="surprise-fill" style="width:${Math.round(s*100)}%"></div></div>
+        <span class="surprise-tag">p6 ${s.toFixed(2)}</span>
+      </div>
+      <button onclick="joinLive(${live.id})">Join Room · ${live.cost} $EROS</button>
     `;
     grid.appendChild(card);
   });

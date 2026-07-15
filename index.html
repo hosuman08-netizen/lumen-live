@@ -11,21 +11,23 @@
 <body>
   <div class="container">
     <header>
-      <div class="disclaimer">FICTIONAL ARTISTIC • 18+ ONLY • NO REAL HUMANS • p9 Web3 Platform × p6 Voice</div>
+      <div class="disclaimer">FICTIONAL ARTISTIC · 18+ ONLY · NO REAL HUMANS</div>
       <h1>EROS</h1>
-      <p class="tagline">Live Sensual Realms • Token-Gated • p6 Breath Live</p>
-      
+      <p class="tagline">Live Sensual Realms · Token-Gated · p6 Breath Live</p>
+
       <div class="wallet">
-        <button onclick="connectWallet()">🔗 Connect Wallet</button>
-        <div id="wallet-info">0x... • 280 $EROS</div>
-        <div id="breath-fuel">Breath Fuel: <span id="bf-val">65</span>% (p6/p5)</div>
+        <button onclick="connectWallet()" class="wallet-btn">Connect Wallet</button>
+        <div class="wallet-meta">
+          <div id="wallet-info">0x… · 280 $EROS</div>
+          <div id="breath-fuel">Breath Fuel <span id="bf-val">65</span>%</div>
+        </div>
       </div>
-      
+
       <div class="nav">
-        <button onclick="showLives()">🔴 Live Rooms</button>
-        <button onclick="showCreate()">🎙️ Go Live (p6 + p5 Ritual)</button>
-        <button onclick="showCommunities()">🏛️ Communities</button>
-        <button onclick="showCodex()">📓 Codex</button>
+        <button onclick="showCreate()" class="primary nav-hero">Go Live</button>
+        <button onclick="showLives()">Live Rooms</button>
+        <button onclick="showCommunities()">Communities</button>
+        <button onclick="showCodex()">Codex</button>
       </div>
     </header>
 
