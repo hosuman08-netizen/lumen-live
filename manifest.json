@@ -1,0 +1,9 @@
+{
+  "name": "Eros Web3 Platform",
+  "short_name": "Eros",
+  "description": "Web3 adult live platform. Fictional artistic. 18+.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0a0806",
+  "theme_color": "#c5a46e"
+}

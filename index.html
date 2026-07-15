@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eros • Web3 Platform</title>
+  <meta name="description" content="Web3 성인 플랫폼. Live + Community. Fictional only. p9 Legion.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="disclaimer">FICTIONAL ARTISTIC • 18+ ONLY • NO REAL HUMANS • p9 Web3 Platform × p6 Voice</div>
+      <h1>EROS</h1>
+      <p class="tagline">Live Sensual Realms • Token-Gated • p6 Breath Live</p>
+      
+      <div class="wallet">
+        <button onclick="connectWallet()">🔗 Connect Wallet</button>
+        <div id="wallet-info">0x... • 280 $EROS</div>
+        <div id="breath-fuel">Breath Fuel: <span id="bf-val">65</span>% (p6/p5)</div>
+      </div>
+      
+      <div class="nav">
+        <button onclick="showLives()">🔴 Live Rooms</button>
+        <button onclick="showCreate()">🎙️ Go Live (p6 + p5 Ritual)</button>
+        <button onclick="showCommunities()">🏛️ Communities</button>
+        <button onclick="showCodex()">📓 Codex</button>
+      </div>
+    </header>
+
+    <!-- Live Rooms -->
+    <div id="lives" class="section">
+      <h2>Live Realms <span class="fomo">12 active • FOMO slots</span></h2>
+      <div id="live-list" class="live-grid"></div>
+    </div>
+
+    <!-- Live Room — mycelial births -->
+    <div id="live-room" class="section hidden">
+      <div class="live-header">
+        <h2 id="room-title"></h2>
+        <div id="room-meta"></div>
+        <button onclick="leaveLive()">Leave Room</button>
+      </div>
+      <div class="surprise-meter">
+        <div>👁 p6 Lung + Ache-Breath Mycelium — Live Intensity</div>
+        <div id="eye-bar"><div id="eye-fill" style="width:0%"></div></div>
+        <div id="eye-val">0.00</div>
+        <div id="breath-fuel-val" style="font-size:10px;opacity:0.7"></div>
+      </div>
+      <div class="tip-battle">
+        <div class="fomo">⚡ FOMO: <span id="seats-left"></span> • <span id="fomo-timer"></span></div>
+        <button onclick="tipBattle()">Variable Tip Battle (near-miss)</button>
+        <button onclick="pulseVoiceLive()" style="margin-top:4px">🎙️ Voice Pulse (p6 Live Rating)</button>
+        <div id="battle-result"></div>
+      </div>
+      <!-- Birth: p5 magic as fantasy play — token-gated spore ritual circles -->
+      <div id="ritual-panel" class="hidden">
+        <div class="ritual">🌿 Spore Ritual Circle (p5 fantasy) • cast surprise • plant mycelium</div>
+        <button onclick="castSporeRitual()">Cast Surprise Spell (voice or tap)</button>
+        <div id="ritual-out"></div>
+      </div>
+      <div class="cohost">
+        <label>Summon p3 Co-Host</label>
+        <select id="cohost-select">
+          <option value="">None</option>
+          <option value="selene">Selene (Velvet)</option>
+          <option value="bunny">Bunny (Ache)</option>
+        </select>
+        <button onclick="summonCohost()">Summon</button>
+        <div id="cohost-status"></div>
+      </div>
+      <!-- Birth 3: NFT live passes near-miss unlock -->
+      <div style="margin-top:8px">
+        <button onclick="mintNftPass()">Mint NFT Live Pass (near-miss unlock)</button>
+        <div id="nft-pass-result" style="font-size:11px;margin-top:4px"></div>
+      </div>
+      <div id="live-chat" class="live-chat"></div>
+    </div>
+
+    <!-- Go Live -->
+    <div id="create" class="section hidden">
+      <h2>Start Live Realm</h2>
+      <div class="form">
+        <label>Realm Title</label>
+        <input id="live-title" placeholder="Velvet Eclipse">
+        
+        <label>Voice (p6 Lung Surprise Eye)</label>
+        <button onclick="startP6Live()">🎙️ Start p6 Voice Live</button>
+        <div id="live-voice"></div>
+        
+        <label>Entry Cost ($EROS)</label>
+        <input id="entry-cost" type="number" value="15">
+        
+        <label>Max Viewers (scarcity)</label>
+        <input id="max-viewers" type="number" value="50">
+        
+        <button onclick="startLive()" class="primary">Go Live (mint Access Pass)</button>
+      </div>
+    </div>
+
+    <!-- Communities -->
+    <div id="communities" class="section hidden">
+      <h2>Token-Gated Communities</h2>
+      <div id="comm-list" class="comm-grid"></div>
+    </div>
+
+    <!-- Codex -->
+    <div id="codex" class="section hidden">
+      <h2>📓 Personal Codex</h2>
+      <div id="codex-list"></div>
+      <button onclick="addReflection()">Reflect on Session</button>
+    </div>
+  </div>
+
+  <script src="../p6-airpods-artistic/lung-surprise-eye.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

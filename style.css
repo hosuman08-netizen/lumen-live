@@ -1,0 +1,65 @@
+/* p9 Eros Platform — Da Vinci + Web3 sensual platform */
+:root {
+  --bg: #0a0806;
+  --gold: #c5a46e;
+  --accent: #f5d76e;
+  --card: #12100d;
+  --text: #f5f1e6;
+  --dim: #8b6f47;
+  --red: #c53030;
+}
+
+body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; margin:0; padding:0; }
+.container { max-width: 480px; margin: 0 auto; padding: 16px; }
+
+h1 { font-size: 36px; color: var(--gold); letter-spacing: -1px; }
+.tagline { color: var(--dim); }
+
+.disclaimer { font-size: 9px; opacity: 0.5; text-align: center; letter-spacing: 0.5px; }
+
+.wallet { display: flex; gap: 8px; align-items: center; margin: 12px 0; }
+#wallet-info { font-family: monospace; font-size: 12px; background: var(--card); padding: 4px 8px; border-radius: 4px; }
+
+.nav { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+button { background: var(--card); color: var(--gold); border: 1px solid #3a3124; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+button.primary { background: var(--gold); color: #0a0806; font-weight: 600; }
+
+.section { margin-bottom: 24px; }
+.hidden { display: none; }
+
+.live-grid, .comm-grid { display: grid; gap: 12px; }
+.live-card, .comm-card {
+  background: var(--card);
+  border: 1px solid #3a3124;
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+}
+.live-card.live { border-color: var(--red); }
+.live-card .meta { font-size: 11px; color: var(--dim); }
+.live-card .viewers { color: var(--red); font-weight: 600; }
+.live-card .price { color: var(--gold); font-weight: 600; }
+.live-card button { margin-top: 8px; width: 100%; }
+
+.form label { display: block; font-size: 12px; color: var(--dim); margin: 10px 0 4px; }
+.form input, .form button { width: 100%; margin-bottom: 8px; }
+
+.fomo { color: #f87171; font-size: 11px; }
+
+.codex-entry {
+  background: var(--card); border: 1px solid #3a3124; padding: 10px; border-radius: 8px; margin: 8px 0;
+}
+
+.eye-hint { position: absolute; top: 10px; right: 10px; font-size: 10px; opacity: 0.6; color: #f5d76e; }
+
+/* p9 Births: live room emergent styles — Da Vinci sfumato + full-cheat FOMO */
+#live-room { background: var(--card); border-radius: 16px; padding: 16px; border: 1px solid #3a3124; }
+.live-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.surprise-meter { margin:12px 0; padding:10px; background:#0f0d0a; border-radius:8px; }
+#eye-bar { height:10px; background:#2a2012; border-radius:99px; overflow:hidden; margin:6px 0; }
+#eye-fill { height:100%; background:linear-gradient(to right, #c5a46e, #f5d76e); transition:width .2s; }
+.tip-battle button { background:#3a3124; color:#f5d76e; }
+.cohost select, .cohost button { width:auto; display:inline; margin-right:6px; }
+.live-chat { margin-top:12px; font-size:12px; max-height:120px; overflow:auto; background:#0a0806; padding:8px; border-radius:6px; line-height:1.3; }
+.ritual { font-size:11px; color:#a78bfa; margin:8px 0 4px; padding:4px 8px; background:#15120f; border-radius:4px; }
+#ritual-panel button { background:#2a2538; border-color:#665a8a; color:#d1c4f0; }
