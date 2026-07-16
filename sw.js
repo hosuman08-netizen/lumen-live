@@ -1,3 +1,3 @@
-// Eros Platform PWA stub
+// Lumen Live PWA stub
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('fetch', () => {});
