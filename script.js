@@ -53,6 +53,13 @@ function updateWalletUI() {
   if (info) info.innerHTML = wallet ? `${wallet} • ${erosBalance} Sparks` : `Guest • ${erosBalance} Sparks`;
   const bf = document.getElementById('bf-val');
   if (bf) bf.textContent = Math.floor(breathFuel * 100);
+  const signBtn = document.querySelector('.wallet-btn');
+  if (signBtn) {
+    signBtn.textContent = wallet ? 'Signed in ✓' : 'Sign In';
+    signBtn.disabled = !!wallet;
+    signBtn.style.opacity = wallet ? '0.55' : '';
+    signBtn.style.cursor = wallet ? 'default' : 'pointer';
+  }
 }
 
 function connectWallet() {
