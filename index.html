@@ -1,131 +1,27 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lumen Live — Creator Rooms</title>
-  <meta name="description" content="A live social platform for creators. Go live, host rooms, build communities. Fictional demo. 18+.">
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-</head>
-<body>
-  <div class="container">
-    <header>
-      <div class="disclaimer">FICTIONAL DEMO · 18+ ONLY · NO REAL PEOPLE OR PAYMENTS</div>
-      <h1>Lumen</h1>
-      <p class="tagline">Go live. Host a room. Grow your community.</p>
-
-      <div class="wallet">
-        <button onclick="connectWallet()" class="wallet-btn">Sign In</button>
-        <div class="wallet-meta">
-          <div id="wallet-info">Guest · 280 Sparks</div>
-          <div id="breath-fuel">Live Energy <span id="bf-val">65</span>%</div>
-        </div>
-      </div>
-
-      <div class="nav">
-        <button onclick="showCreate()" class="primary nav-hero">Go Live</button>
-        <button onclick="showLives()">Live Rooms</button>
-        <button onclick="showCommunities()">Communities</button>
-        <button onclick="showCodex()">Journal</button>
-      </div>
-    </header>
-
-    <!-- Live Rooms -->
-    <div id="lives" class="section">
-      <h2>Live Now <span class="fomo">12 rooms live</span></h2>
-      <div id="live-list" class="live-grid"></div>
-    </div>
-
-    <!-- Live Room -->
-    <div id="live-room" class="section hidden">
-      <div class="live-header">
-        <h2 id="room-title"></h2>
-        <div id="room-meta"></div>
-        <div class="room-stats">
-          <span>👥 <b id="room-viewers">0</b> live</span>
-          <span>✦ pot <b id="room-pot">0 Sparks</b></span>
-        </div>
-        <button onclick="leaveLive()">Leave Room</button>
-      </div>
-      <div class="surprise-meter">
-        <div>👁 Live Energy Meter</div>
-        <div id="eye-bar"><div id="eye-fill" style="width:0%"></div></div>
-        <div id="eye-val">0.00</div>
-        <div id="breath-fuel-val" style="font-size:10px;opacity:0.7"></div>
-      </div>
-      <div class="tip-battle">
-        <div class="fomo">⚡ <span id="seats-left"></span> · <span id="fomo-timer"></span></div>
-        <button onclick="tipBattle()">Send a Spark</button>
-        <button onclick="pulseVoiceLive()" style="margin-top:4px">🎙️ Go on Mic</button>
-        <div id="battle-result"></div>
-      </div>
-      <!-- Live Moments: interactive shout-out -->
-      <div id="ritual-panel" class="hidden">
-        <div class="ritual">🎉 Live Moment · send a shout-out to the room</div>
-        <button onclick="sendShoutout()">Send Shout-out</button>
-        <div id="ritual-out"></div>
-      </div>
-      <div class="cohost">
-        <label>Invite a Co-Host</label>
-        <select id="cohost-select">
-          <option value="">None</option>
-          <option value="Selene">Selene</option>
-          <option value="Bunny">Bunny</option>
-        </select>
-        <button onclick="summonCohost()">Invite</button>
-        <div id="cohost-status"></div>
-      </div>
-      <!-- Room Pass -->
-      <div style="margin-top:8px">
-        <button onclick="getRoomPass()">Get a Room Pass</button>
-        <div id="pass-result" style="font-size:11px;margin-top:4px"></div>
-      </div>
-      <div id="live-chat" class="live-chat"></div>
-      <div class="chat-compose">
-        <input id="chat-input" placeholder="Say something to the room…" maxlength="140" autocomplete="off"
-               onkeydown="if(event.key==='Enter')sendChat()">
-        <button onclick="sendChat()">Send</button>
-      </div>
-    </div>
-
-    <!-- Go Live -->
-    <div id="create" class="section hidden">
-      <h2>Start Your Room</h2>
-      <div class="form">
-        <label>Room Title</label>
-        <input id="live-title" placeholder="Late Night Chat">
-
-        <label>Voice Check</label>
-        <button onclick="startMicCheck()">🎙️ Test Mic & Go Live</button>
-        <div id="live-voice"></div>
-
-        <label>Entry Cost (Sparks)</label>
-        <input id="entry-cost" type="number" value="15">
-
-        <label>Max Viewers</label>
-        <input id="max-viewers" type="number" value="50">
-
-        <button onclick="startLive()" class="primary">Go Live</button>
-      </div>
-    </div>
-
-    <!-- Communities -->
-    <div id="communities" class="section hidden">
-      <h2>Communities</h2>
-      <div id="comm-list" class="comm-grid"></div>
-    </div>
-
-    <!-- Journal -->
-    <div id="codex" class="section hidden">
-      <h2>📓 Session Journal</h2>
-      <div id="codex-list"></div>
-      <button onclick="addReflection()">Add a Note</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-<script>window.LEGION_APP='lumen-live';window.LEGION_ANALYTICS_URL='https://legion-analytics.hoyashi95.workers.dev';</script>
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Adult Platform 18+</title>
+<style>
+body{margin:0;background:#0b0a10;color:#ece8f1;font-family:system-ui;max-width:440px;margin:0 auto;padding:20px}
+h1{color:#f472b6} .card{background:#15131d;border:1px solid #2a2438;border-radius:14px;padding:14px;margin:10px 0}
+a{color:#e0b552;display:block;margin:8px 0;text-decoration:none} .sub{color:#8a8398;font-size:12px}
+</style></head><body>
+<p class="sub">18+ · Fictional entertainment hub · 실결제/실관계 아님</p>
+<h1>Adult Platform 18+</h1>
+<div class="card"><b>연령 확인</b><p class="sub">계속하면 18세 이상으로 간주합니다.</p>
+<button id="ok" style="width:100%;padding:12px;border:0;border-radius:10px;background:#f472b6;color:#111;font-weight:800">18+ 입장</button></div>
+<div class="card" id="links" style="display:none">
+<a href="https://hosuman08-netizen.github.io/ai-companion/">AI Companion</a>
+<a href="https://hosuman08-netizen.github.io/soft-paywall/">Soft Paywall</a>
+<a href="https://hosuman08-netizen.github.io/exclusive-drop/">Exclusive Drop</a>
+<a href="https://hosuman08-netizen.github.io/idol-card/">Idol Card</a>
+<a href="https://hosuman08-netizen.github.io/romance-quest/">Romance Quest</a>
+<a href="https://hosuman08-netizen.github.io/legion-hub/">← Arcade</a>
+</div>
+<footer class="sub" style="text-align:center;margin-top:20px">미꾸라지: layered 18+ · fictional only</footer>
+<script>
+document.getElementById('ok').onclick=function(){document.getElementById('links').style.display='block';try{legionTrack&&legionTrack('activate',{age:18})}catch(e){}};
+window.LEGION_APP='web3-adult-platform';
+</script>
 <script src="legion-beacon.js"></script>
-</body>
-</html>
+</body></html>
