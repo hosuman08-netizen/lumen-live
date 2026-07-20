@@ -137,6 +137,7 @@ function joinLive(id) {
   addChat('Welcome to the room. Say hi in chat!', null, 'sys');
   startAudience(live);
   if (live.ritual) document.getElementById('ritual-panel').classList.remove('hidden');
+  if (window.legionTrack) legionTrack('activate');
   renderLives();
 }
 
@@ -424,6 +425,7 @@ function summonCohost() {
   stopCohost();
   cohostActive = sel;
   if (st) st.textContent = `${sel} is co-hosting · live`;
+  if (window.legionTrack) legionTrack('share');
   addChat(`${sel} joined as co-host — say hi!`, null, 'sys');
   ambientPool.push(sel);
   currentLive.viewers = (currentLive.viewers || 12) + 1;
