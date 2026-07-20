@@ -23,6 +23,7 @@ function pullEnergy() {
 let currentLive = null;
 let eyeInterval = null;
 let cohostActive = null;
+let cohostInterval = null;
 let ritualInterval = null;
 
 function initApp() {
@@ -355,6 +356,30 @@ function sendShoutout() {
   document.getElementById('eye-val').textContent = currentLive.surprise.toFixed(2);
 }
 
+// You say something to the room — the crowd hears you and sometimes reacts.
+const CHAT_REPLIES = ['hey you 👋','welcome!','oh hi','ayy','ha, same','right??','felt that','yesss','stay a while','love that'];
+function sendChat() {
+  const inp = document.getElementById('chat-input');
+  if (!inp) return;
+  const msg = inp.value.trim();
+  if (!msg || !currentLive) { inp.value = ''; return; }
+  inp.value = '';
+  addChat(msg, 'you', 'you');
+  // Talking warms the room a little — presence raises live energy.
+  currentLive.surprise = Math.min(1, (currentLive.surprise || 0.5) + 0.03);
+  const bar = document.getElementById('eye-fill'); if (bar) bar.style.width = Math.floor(currentLive.surprise*100)+'%';
+  const val = document.getElementById('eye-val'); if (val) val.textContent = currentLive.surprise.toFixed(2);
+  // The audience sometimes replies — hotter rooms are more talkative.
+  const s = Math.max(0, Math.min(1, currentLive.surprise || 0));
+  if (ambientPool.length && Math.random() < 0.35 + s * 0.4) {
+    const speaker = ambientPool[Math.floor(Math.random() * ambientPool.length)];
+    setTimeout(() => {
+      if (!currentLive) return;
+      addChat(CHAT_REPLIES[Math.floor(Math.random() * CHAT_REPLIES.length)], speaker, 'aud');
+    }, 500 + Math.random() * 1100);
+  }
+}
+
 function addReflection() {
   const note = prompt('What did this live session teach you?');
   if (note) {
@@ -374,17 +399,50 @@ function leaveLive() {
   document.getElementById('lives').classList.remove('hidden');
   const rp = document.getElementById('ritual-panel'); if (rp) rp.classList.add('hidden');
   const c = document.getElementById('live-chat'); if (c) c.innerHTML = '';
+  const ci = document.getElementById('chat-input'); if (ci) ci.value = '';
+  stopCohost();
 }
 
+// A co-host actually joins the room and keeps the banter going live.
+const COHOST_LINES = {
+  hot:  ['this crowd is unreal tonight','ok everybody is SO here for this','I can feel it from over here 🔥','yesss keep it going','the pot is climbing, I love you all'],
+  warm: ['good to see everyone','love the energy in here','say hi if you just walked in','staying cozy with you all','who wants a shout-out next?'],
+  quiet:['it\'s early, more folks coming','I\'ll keep you company','patience — the good part\'s coming','soft start, that\'s okay','sipping tea, waiting with you']
+};
 function summonCohost() {
   const sel = document.getElementById('cohost-select').value;
   const st = document.getElementById('cohost-status');
-  if (!sel) return;
-  st.textContent = sel + ' is joining.';
-  addChat(sel + ' joined as co-host.');
-  if (currentLive && Math.random() > 0.5) {
-    currentLive.surprise = Math.min(1, currentLive.surprise + 0.06);
-    addChat('co-host banter • energy rose');
+  if (!currentLive) { if (st) st.textContent = 'Join a room first.'; return; }
+  if (!sel) { if (st) st.textContent = 'Pick a co-host to invite.'; return; }
+  stopCohost();
+  cohostActive = sel;
+  if (st) st.textContent = `${sel} is co-hosting · live`;
+  addChat(`${sel} joined as co-host — say hi!`, null, 'sys');
+  ambientPool.push(sel);
+  currentLive.viewers = (currentLive.viewers || 12) + 1;
+  reflectRoomStats(currentLive);
+  // Two hosts play off each other — a real, steady lift while co-hosting.
+  currentLive.surprise = Math.min(1, currentLive.surprise + 0.08);
+  cohostInterval = setInterval(() => {
+    if (!currentLive || cohostActive !== sel) { stopCohost(); return; }
+    const s = Math.max(0, Math.min(1, currentLive.surprise || 0));
+    // Co-host keeps the floor warm — a small, honest ongoing boost.
+    currentLive.surprise = Math.min(1, currentLive.surprise + 0.015);
+    if (Math.random() < 0.7) {
+      const pool = s > 0.66 ? COHOST_LINES.hot : s > 0.42 ? COHOST_LINES.warm : COHOST_LINES.quiet;
+      addChat(pool[Math.floor(Math.random() * pool.length)], sel, 'cohost');
+    }
+    const bar = document.getElementById('eye-fill'); if (bar) bar.style.width = Math.floor(currentLive.surprise*100)+'%';
+    const val = document.getElementById('eye-val'); if (val) val.textContent = currentLive.surprise.toFixed(2);
+  }, 5200);
+}
+
+function stopCohost() {
+  if (cohostInterval) { clearInterval(cohostInterval); cohostInterval = null; }
+  if (cohostActive) {
+    const idx = ambientPool.indexOf(cohostActive);
+    if (idx >= 0) ambientPool.splice(idx, 1);
+    cohostActive = null;
   }
 }
 

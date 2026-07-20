@@ -96,6 +96,21 @@ button.primary { background: var(--gold); color: #0a0806; font-weight: 700; bord
 .chat-leave { color:#6b6152; }
 .chat-tip   { color:var(--accent); font-weight:600; }
 .chat-aud   { color:var(--text); }
+.chat-you   { color:var(--accent); }
+.chat-you .chat-who { color:var(--accent); }
+.chat-cohost { color:#d1c4f0; }
+.chat-cohost .chat-who { color:#a78bfa; }
+
+/* Compose bar — say something to the room */
+.chat-compose { display:flex; gap:6px; margin-top:8px; }
+.chat-compose input {
+  flex:1; min-width:0; background:#0a0806; color:var(--text);
+  border:1px solid #3a3124; border-radius:8px; padding:9px 12px; font-size:13px;
+  outline:none; transition:border-color .15s ease-out;
+}
+.chat-compose input:focus { border-color:var(--gold); }
+.chat-compose input::placeholder { color:var(--dim); }
+.chat-compose button { flex-shrink:0; }
 @keyframes chat-in { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:none; } }
 .ritual { font-size:11px; color:#a78bfa; margin:8px 0 4px; padding:4px 8px; background:#15120f; border-radius:4px; }
 #ritual-panel button { background:#2a2538; border-color:#665a8a; color:#d1c4f0; }

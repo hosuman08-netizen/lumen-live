@@ -82,6 +82,11 @@
         <div id="pass-result" style="font-size:11px;margin-top:4px"></div>
       </div>
       <div id="live-chat" class="live-chat"></div>
+      <div class="chat-compose">
+        <input id="chat-input" placeholder="Say something to the room…" maxlength="140" autocomplete="off"
+               onkeydown="if(event.key==='Enter')sendChat()">
+        <button onclick="sendChat()">Send</button>
+      </div>
     </div>
 
     <!-- Go Live -->
