@@ -69,6 +69,7 @@ function connectWallet() {
 }
 
 function renderLives() {
+  try{renderLlLoop();}catch(e){}
   const grid = document.getElementById('live-list');
   if (!grid) return;
   grid.innerHTML = '';
@@ -345,6 +346,7 @@ function pulseVoiceLive() {
 
 // Send a shout-out to the room (Live Moment).
 function sendShoutout() {
+  try{bumpLlStreak('shout');}catch(e){}
   if (!currentLive) return;
   const out = document.getElementById('ritual-out');
   if (erosBalance < 5) { out.textContent = 'need 5 Sparks'; return; }
@@ -366,7 +368,46 @@ function sendShoutout() {
 
 // You say something to the room — the crowd hears you and sometimes reacts.
 const CHAT_REPLIES = ['hey you 👋','welcome!','oh hi','ayy','ha, same','right??','felt that','yesss','stay a while','love that'];
+
+function llDayKey(off){const d=new Date();d.setDate(d.getDate()+(off||0));return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function bumpLlStreak(kind){
+  try{
+    let st=JSON.parse(localStorage.getItem('ll_streak')||'{}');
+    const t0=llDayKey(0);
+    if(st.last!==t0){
+      const y=llDayKey(-1),y2=llDayKey(-2);
+      if(st.last&&st.last!==y&&st.last===y2&&(st.count||0)>=3){
+        const ready=!st.shieldLast||((new Date(t0)-new Date(st.shieldLast))/86400000)>=7;
+        if(ready){st.shieldLast=t0;st.last=y;}
+      }
+      st.count=(st.last===y)?(st.count||0)+1:1; st.last=t0;
+      localStorage.setItem('ll_streak',JSON.stringify(st));
+      try{legionTrack('streak',{count:st.count})}catch(e){}
+    }
+    const k='ll_day_'+t0; let day=JSON.parse(localStorage.getItem(k)||'{"chats":0}');
+    day.chats=(day.chats||0)+1; localStorage.setItem(k,JSON.stringify(day));
+    renderLlLoop();
+  }catch(e){}
+}
+function renderLlLoop(){
+  try{
+    let el=document.getElementById('llLoop');
+    if(!el){ el=document.createElement('div'); el.id='llLoop';
+      el.style.cssText='margin:8px 12px;padding:10px;border:1px solid #f472b644;border-radius:12px;font-size:12px;display:flex;flex-wrap:wrap;gap:8px;background:#16121c';
+      const host=document.querySelector('header')||document.querySelector('h1')||document.body;
+      host.insertAdjacentElement('afterend', el);
+    }
+    const st=JSON.parse(localStorage.getItem('ll_streak')||'{}');
+    const day=JSON.parse(localStorage.getItem('ll_day_'+llDayKey(0))||'{}');
+    const end=new Date(); end.setHours(24,0,0,0);
+    const ms=Math.max(0,end-Date.now());
+    const clock=Math.floor(ms/3600000)+'h '+Math.floor((ms%3600000)/60000)+'m';
+    el.innerHTML='🔥 '+(st.count||0)+'d · today acts '+(day.chats||0)+' · reset '+clock+' · <span style="opacity:.7">18+ live sim · fictional</span>';
+  }catch(e){}
+}
+
 function sendChat() {
+  try{bumpLlStreak('chat');}catch(e){}
   const inp = document.getElementById('chat-input');
   if (!inp) return;
   const msg = inp.value.trim();
@@ -612,3 +653,5 @@ document.addEventListener('click',function(ev){try{var el=ev.target;if(!el)retur
   app.appendChild(d.firstElementChild||d);
 }catch(e){}})();
 
+
+try{ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', renderLlLoop); else setTimeout(renderLlLoop,80); }catch(e){}
